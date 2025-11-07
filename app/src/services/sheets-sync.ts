@@ -81,7 +81,9 @@ export async function syncWithGoogleSheets() {
     for (const sheetRow of sheetData) {
       const existing = existingByRowId.get(sheetRow.rowId);
 
-      const horsepower = sheetRow.score ? parseInt(sheetRow.score, 10) : null;
+      // Parse score, handling empty/invalid values as null
+      const parsedScore = sheetRow.score ? parseInt(sheetRow.score, 10) : NaN;
+      const horsepower = !isNaN(parsedScore) ? parsedScore : null;
 
       if (!existing) {
         // New record - add it

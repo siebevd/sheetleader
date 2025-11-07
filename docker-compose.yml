@@ -56,11 +56,10 @@ services:
     expose:
       - "8080"
     environment:
-      - NC_DB=sqlite3:///nocodb/sheetleader.db
       - NC_DISABLE_TELE=true
     volumes:
-      - ./app/data:/nocodb:ro
-      - nocodb-data:/usr/app/data
+      - ./app/data:/app/data
+      - nocodb-data:/usr/app/data/nc
     restart: unless-stopped
     networks:
       - sheetleader-network
