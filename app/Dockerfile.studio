@@ -1,0 +1,19 @@
+FROM oven/bun:1
+
+WORKDIR /app
+
+# Copy package files
+COPY package.json bun.lock ./
+
+# Install dependencies
+RUN bun install
+
+# Copy drizzle config and schema
+COPY drizzle.config.ts ./
+COPY src/db ./src/db
+
+# Expose Drizzle Studio port (default is 4983)
+EXPOSE 4983
+
+# Run Drizzle Studio
+CMD ["bun", "run", "db:studio", "--host", "0.0.0.0"]

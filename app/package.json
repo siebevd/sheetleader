@@ -1,0 +1,22 @@
+{
+  "name": "app",
+  "version": "1.0.50",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "bun run --watch src/index.ts",
+    "db:studio": "bunx drizzle-kit studio",
+    "db:seed": "bun run src/db/seed.ts",
+    "db:migrate": "bunx drizzle-kit migrate"
+  },
+  "dependencies": {
+    "@elysiajs/cors": "^1.4.0",
+    "@elysiajs/static": "^1.4.6",
+    "drizzle-orm": "^0.44.7",
+    "elysia": "latest"
+  },
+  "devDependencies": {
+    "bun-types": "latest",
+    "drizzle-kit": "^0.31.6"
+  },
+  "module": "src/index.js"
+}
