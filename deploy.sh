@@ -30,14 +30,12 @@ sleep 5
 echo "📁 Ensuring database directory exists..."
 docker compose exec -T backend mkdir -p /app/data
 
-# Only push schema if database doesn't exist (initial setup)
-if [ ! -f "./app/data/sheetleader.db" ]; then
-  echo "🗄️  Database not found, creating initial schema..."
-  docker compose exec -T backend bunx drizzle-kit push || echo "⚠️  Schema push failed"
-else
-  echo "✅ Database exists, skipping schema push to preserve data"
-  echo "   (To force schema update, run: docker compose exec backend bunx drizzle-kit push)"
-fi
+# Generate and run migrations
+echo "🗄️  Generating migrations..."
+docker compose exec -T backend bunx drizzle-kit generate || echo "⚠️  No schema changes detected"
+
+echo "🗄️  Running migrations..."
+docker compose exec -T backend bunx drizzle-kit migrate || echo "⚠️  Migration failed or no migrations to run"
 
 # Show container status
 echo ""

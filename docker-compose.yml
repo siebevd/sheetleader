@@ -58,9 +58,7 @@ services:
     expose:
       - "4983"
     volumes:
-      - ./app/data:/app/data
-      - ./app/src:/app/src
-      - ./app/drizzle.config.ts:/app/drizzle.config.ts
+      - ./app:/app
     restart: unless-stopped
     networks:
       - sheetleader-network
