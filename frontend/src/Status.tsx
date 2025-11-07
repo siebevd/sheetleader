@@ -267,7 +267,7 @@ function Status() {
                   )}
                   {status.errorDetails && (
                     <div className="md:col-span-2">
-                      <p className="text-white/70 text-sm mb-1">Error Details</p>
+                      <p className="text-white/70 text-sm mb-1">Details</p>
                       <p className="text-red-300 font-mono text-sm">{status.errorDetails}</p>
                     </div>
                   )}
@@ -290,17 +290,17 @@ function Status() {
                         </div>
                       </div>
                       <p className="text-white mb-2">{log.message}</p>
-                      {(log.recordsAdded || log.recordsUpdated || log.recordsDeleted) && (
+                      {((log.recordsAdded && log.recordsAdded > 0) || (log.recordsUpdated && log.recordsUpdated > 0) || (log.recordsDeleted && log.recordsDeleted > 0)) && (
                         <div className="flex gap-4 text-sm">
-                          {log.recordsAdded! > 0 && <span className="text-green-300">+{log.recordsAdded} added</span>}
-                          {log.recordsUpdated! > 0 && <span className="text-blue-300">~{log.recordsUpdated} updated</span>}
-                          {log.recordsDeleted! > 0 && <span className="text-red-300">-{log.recordsDeleted} deleted</span>}
+                          {log.recordsAdded && log.recordsAdded > 0 && <span className="text-green-300">+{log.recordsAdded} added</span>}
+                          {log.recordsUpdated && log.recordsUpdated > 0 && <span className="text-blue-300">~{log.recordsUpdated} updated</span>}
+                          {log.recordsDeleted && log.recordsDeleted > 0 && <span className="text-red-300">-{log.recordsDeleted} deleted</span>}
                         </div>
                       )}
                       {log.errorDetails && (
                         <details className="mt-2">
-                          <summary className="text-red-300 text-sm cursor-pointer">Error Details</summary>
-                          <pre className="text-red-300/80 text-xs mt-2 p-2 bg-black/20 rounded overflow-x-auto">{log.errorDetails}</pre>
+                          <summary className="text-yellow-300 text-sm cursor-pointer">View Details</summary>
+                          <pre className="text-white/80 text-xs mt-2 p-2 bg-black/20 rounded overflow-x-auto">{log.errorDetails}</pre>
                         </details>
                       )}
                     </div>
