@@ -27,6 +27,7 @@ services:
     depends_on:
       - backend
       - frontend-build
+      - nocodb
     restart: unless-stopped
     networks:
       - sheetleader-network
@@ -49,6 +50,21 @@ services:
     networks:
       - sheetleader-network
 
+  nocodb:
+    image: nocodb/nocodb:latest
+    container_name: sheetleader-nocodb
+    expose:
+      - "8080"
+    environment:
+      - NC_DB=sqlite3:///nocodb/sheetleader.db
+      - NC_DISABLE_TELE=true
+    volumes:
+      - ./app/data:/nocodb:ro
+      - nocodb-data:/usr/app/data
+    restart: unless-stopped
+    networks:
+      - sheetleader-network
+
 networks:
   sheetleader-network:
     driver: bridge
@@ -57,3 +73,4 @@ volumes:
   frontend-dist:
   caddy-data:
   caddy-config:
+  nocodb-data:

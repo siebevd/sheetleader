@@ -3,6 +3,20 @@
     admin off
 }
 
+# NocoDB subdomain
+studio.{$DOMAIN:localhost} {
+    reverse_proxy nocodb:8080
+
+    # Enable compression
+    encode gzip
+
+    # Logging
+    log {
+        output stdout
+        format console
+    }
+}
+
 # Main application
 {$DOMAIN:localhost} {
     # Handle API requests
