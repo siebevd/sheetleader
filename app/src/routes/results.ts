@@ -70,9 +70,9 @@ export const resultsRoutes = new Elysia({ prefix: "/api" })
   // Get stats
   .get("/stats", async () => {
     try {
-      const totalCount = await db.select({ count: sql<number>`count(*)` }).from(results);
-      const avgHP = await db.select({ avg: sql<number>`avg(horsepower)` }).from(results);
-      const maxHP = await db.select({ max: sql<number>`max(horsepower)` }).from(results);
+      const totalCount = await db.select({ count: sql<number>`count(*)` }).from(results).where(isNotNull(results.horsepower));
+      const avgHP = await db.select({ avg: sql<number>`avg(horsepower)` }).from(results).where(isNotNull(results.horsepower));
+      const maxHP = await db.select({ max: sql<number>`max(horsepower)` }).from(results).where(isNotNull(results.horsepower));
 
       // Get most popular tractor model
       const popularModel = await db.select({

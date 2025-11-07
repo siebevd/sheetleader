@@ -59,18 +59,24 @@ function Home() {
       .then((data: StatsResponse) => setStats(data))
       .catch((err) => console.error("Failed to fetch stats:", err));
 
-    // Fetch sponsor images
+    // Fetch sponsor images and randomize order
     fetch("/api/images")
       .then((res) => res.json())
       .then((data: ImagesResponse) => {
         if (data.images && data.images.length > 0) {
-          setImages(data.images);
+          // Shuffle the array using Fisher-Yates algorithm
+          const shuffled = [...data.images];
+          for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+          }
+          setImages(shuffled);
         }
       })
       .catch((err) => console.error("Failed to fetch images:", err));
   }, []);
 
-  // Rotate sponsor images every 5 seconds
+  // Rotate sponsor images every 5 seconds sequentially
   useEffect(() => {
     if (images.length === 0) return;
 
@@ -230,12 +236,6 @@ function Home() {
                         </p>
                         <p className="text-white/60 text-xs">PK</p>
                       </div>
-                    </div>
-                    <div className="text-white/60 text-sm font-mono font-semibold">
-                      {resultDate.toLocaleTimeString("nl-NL", {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
                     </div>
                   </div>
                 );

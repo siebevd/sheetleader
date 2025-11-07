@@ -40,13 +40,19 @@ function Presentation() {
   const [resultFade, setResultFade] = useState(true);
   const [stats, setStats] = useState<StatsResponse | null>(null);
 
-  // Fetch images
+  // Fetch images and randomize order
   useEffect(() => {
     fetch("/api/images")
       .then((res) => res.json())
       .then((data: ImagesResponse) => {
         if (data.images && data.images.length > 0) {
-          setImages(data.images);
+          // Shuffle the array using Fisher-Yates algorithm
+          const shuffled = [...data.images];
+          for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+          }
+          setImages(shuffled);
         }
       })
       .catch((err) => console.error("Failed to fetch images:", err));
@@ -86,7 +92,7 @@ function Presentation() {
     return () => clearInterval(interval);
   }, []);
 
-  // Rotate images every 30 seconds
+  // Rotate images every 5 seconds sequentially
   useEffect(() => {
     if (images.length === 0) return;
 
@@ -96,7 +102,7 @@ function Presentation() {
         setImageIndex((prev) => (prev + 1) % images.length);
         setImageFade(true);
       }, 500);
-    }, 30000); // 30 seconds
+    }, 5000); // 5 seconds
 
     return () => clearInterval(interval);
   }, [images.length]);
@@ -115,7 +121,7 @@ function Presentation() {
         });
         setResultFade(true);
       }, 500);
-    }, 15000); // 15 seconds
+    }, 10000); // 15 seconds
 
     return () => clearInterval(interval);
   }, [results.length]);
@@ -162,7 +168,7 @@ function Presentation() {
       {/* Logo overlay - left 30% width with fade effect */}
       <div
         className="absolute left-0 top-0 h-full flex items-center"
-        style={{ width: "30%" }}
+        style={{ width: "35%" }}
       >
         {images.length > 0 && (
           <img
