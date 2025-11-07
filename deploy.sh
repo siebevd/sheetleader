@@ -26,16 +26,9 @@ docker compose up -d --build --force-recreate
 # Wait a moment for containers to start
 sleep 5
 
-# Ensure database directory exists
+# Ensure database directory exists on host
 echo "📁 Ensuring database directory exists..."
-docker compose exec -T backend mkdir -p /app/data
-
-# Generate and run migrations
-echo "🗄️  Generating migrations..."
-docker compose exec -T backend bunx drizzle-kit generate || echo "⚠️  No schema changes detected"
-
-echo "🗄️  Running migrations..."
-docker compose exec -T backend bunx drizzle-kit migrate || echo "⚠️  Migration failed or no migrations to run"
+mkdir -p ./app/data
 
 # Show container status
 echo ""

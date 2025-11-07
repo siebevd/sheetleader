@@ -8,8 +8,11 @@ RUN bun install --frozen-lockfile
 # Copy source code
 COPY . .
 
+# Make start script executable
+RUN chmod +x start.sh
+
 # Expose port
 EXPOSE 3000
 
-# Run the app
-CMD ["bun", "run", "src/index.ts"]
+# Run the startup script (runs migrations then starts app)
+CMD ["./start.sh"]

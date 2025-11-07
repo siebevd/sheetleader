@@ -3,20 +3,6 @@
     admin off
 }
 
-# Drizzle Studio subdomain
-studio.{$DOMAIN:localhost} {
-    reverse_proxy drizzle-studio:4983
-
-    # Enable compression
-    encode gzip
-
-    # Logging
-    log {
-        output stdout
-        format console
-    }
-}
-
 # Main application
 {$DOMAIN:localhost} {
     # Handle API requests

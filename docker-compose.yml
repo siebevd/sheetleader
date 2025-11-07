@@ -27,7 +27,6 @@ services:
     depends_on:
       - backend
       - frontend-build
-      - drizzle-studio
     restart: unless-stopped
     networks:
       - sheetleader-network
@@ -46,19 +45,6 @@ services:
       - ./app/.env
     volumes:
       - ./app/data:/app/data
-    restart: unless-stopped
-    networks:
-      - sheetleader-network
-
-  drizzle-studio:
-    build:
-      context: ./app
-      dockerfile: Dockerfile.studio
-    container_name: sheetleader-drizzle-studio
-    expose:
-      - "4983"
-    volumes:
-      - ./app:/app
     restart: unless-stopped
     networks:
       - sheetleader-network
