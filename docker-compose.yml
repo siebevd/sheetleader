@@ -27,7 +27,7 @@ services:
     depends_on:
       - backend
       - frontend-build
-      - nocodb
+      - sql-studio
     restart: unless-stopped
     networks:
       - sheetleader-network
@@ -50,16 +50,14 @@ services:
     networks:
       - sheetleader-network
 
-  nocodb:
-    image: nocodb/nocodb:latest
-    container_name: sheetleader-nocodb
+  sql-studio:
+    image: ghcr.io/frectonz/sql-studio:latest
+    container_name: sheetleader-sql-studio
     expose:
-      - "8080"
-    environment:
-      - NC_DISABLE_TELE=true
+      - "3030"
     volumes:
-      - ./app/data:/app/data
-      - nocodb-data:/usr/app/data/nc
+      - ./app/data:/data
+    command: /data/sheetleader.db
     restart: unless-stopped
     networks:
       - sheetleader-network
@@ -72,4 +70,3 @@ volumes:
   frontend-dist:
   caddy-data:
   caddy-config:
-  nocodb-data:

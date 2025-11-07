@@ -6,10 +6,76 @@ export const resultsRoutes = new Elysia({ prefix: "/api" })
   // Get all results
   .get("/results", async () => {
     try {
-      const allResults = await db.select().from(results).orderBy(desc(results.timestamp));
+      const allResults = await db.select().from(results).orderBy(desc(results.id));
       return { results: allResults };
     } catch (error) {
       return { results: [], error: "Failed to fetch results" };
+    }
+  })
+  // Create a new result
+  .post("/results", async ({ body }: { body: any }) => {
+    try {
+      const { name, tractor, horsepower } = body;
+
+      if (!name || !tractor) {
+        return { error: "Name and tractor are required" };
+      }
+
+      const timestamp = horsepower ? new Date() : null;
+
+      const [newResult] = await db.insert(results).values({
+        name,
+        tractor,
+        horsepower: horsepower || null,
+        timestamp,
+        sheetRowId: null, // Manual entries don't have sheet row IDs
+      }).returning();
+
+      return { result: newResult };
+    } catch (error) {
+      return { error: "Failed to create result" };
+    }
+  })
+  // Update a result
+  .put("/results/:id", async ({ params, body }: { params: { id: string }, body: any }) => {
+    try {
+      const id = parseInt(params.id);
+      const { name, tractor, horsepower } = body;
+
+      if (!name || !tractor) {
+        return { error: "Name and tractor are required" };
+      }
+
+      // Get existing record to check if score changed
+      const existing = await db.select().from(results).where(eq(results.id, id)).limit(1);
+      if (existing.length === 0) {
+        return { error: "Result not found" };
+      }
+
+      // Update timestamp if horsepower changed
+      let timestamp = existing[0].timestamp;
+      if (existing[0].horsepower !== horsepower) {
+        timestamp = horsepower ? new Date() : null;
+      }
+
+      const [updated] = await db.update(results)
+        .set({ name, tractor, horsepower: horsepower || null, timestamp })
+        .where(eq(results.id, id))
+        .returning();
+
+      return { result: updated };
+    } catch (error) {
+      return { error: "Failed to update result" };
+    }
+  })
+  // Delete a result
+  .delete("/results/:id", async ({ params }: { params: { id: string } }) => {
+    try {
+      const id = parseInt(params.id);
+      await db.delete(results).where(eq(results.id, id));
+      return { success: true };
+    } catch (error) {
+      return { error: "Failed to delete result" };
     }
   })
   // Get recent results (last 20 with horsepower) with comparisons

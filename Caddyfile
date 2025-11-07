@@ -3,9 +3,9 @@
     admin off
 }
 
-# NocoDB subdomain
+# SQL Studio subdomain
 studio.{$DOMAIN:localhost} {
-    reverse_proxy nocodb:8080
+    reverse_proxy sql-studio:3030
 
     # Enable compression
     encode gzip
