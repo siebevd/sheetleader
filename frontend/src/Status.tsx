@@ -42,6 +42,7 @@ function Status() {
   const [logs, setLogs] = useState<SyncLog[]>([]);
   const [status, setStatus] = useState<SyncStatus | null>(null);
   const [syncing, setSyncing] = useState(false);
+  const [showOnlyWithChanges, setShowOnlyWithChanges] = useState(false);
 
   // Database tab state
   const [results, setResults] = useState<Result[]>([]);
@@ -276,12 +277,31 @@ function Status() {
             )}
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
-              <h2 className="text-white text-xl font-bold mb-4">Sync History</h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-white text-xl font-bold">Sync History</h2>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={showOnlyWithChanges}
+                    onChange={(e) => setShowOnlyWithChanges(e.target.checked)}
+                    className="w-4 h-4 rounded border-white/30 bg-white/20 text-white focus:ring-white/50"
+                  />
+                  <span className="text-white/80 text-sm">Only show changes</span>
+                </label>
+              </div>
               <div className="space-y-3">
-                {logs.length === 0 ? (
-                  <p className="text-white/70 text-center py-8">No sync logs yet</p>
-                ) : (
-                  logs.map((log) => (
+                {(() => {
+                  const filteredLogs = logs.filter((log) => !showOnlyWithChanges || (log.recordsAdded ?? 0) > 0 || (log.recordsUpdated ?? 0) > 0 || (log.recordsDeleted ?? 0) > 0);
+
+                  if (logs.length === 0) {
+                    return <p className="text-white/70 text-center py-8">No sync logs yet</p>;
+                  }
+
+                  if (filteredLogs.length === 0) {
+                    return <p className="text-white/70 text-center py-8">No logs with changes</p>;
+                  }
+
+                  return filteredLogs.map((log) => (
                     <div key={log.id} className="bg-white/5 rounded-lg p-4 border border-white/10">
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex items-center gap-3">
@@ -304,8 +324,8 @@ function Status() {
                         </details>
                       )}
                     </div>
-                  ))
-                )}
+                  ));
+                })()}
               </div>
             </div>
           </>
