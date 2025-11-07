@@ -3,15 +3,25 @@
     admin off
 }
 
+# Drizzle Studio subdomain
+studio.{$DOMAIN:localhost} {
+    reverse_proxy drizzle-studio:4983
+
+    # Enable compression
+    encode gzip
+
+    # Logging
+    log {
+        output stdout
+        format console
+    }
+}
+
+# Main application
 {$DOMAIN:localhost} {
     # Handle API requests
     handle /api/* {
         reverse_proxy backend:3000
-    }
-
-    # Handle Drizzle Studio
-    handle_path /studio* {
-        reverse_proxy drizzle-studio:4983
     }
 
     # Serve frontend static files
