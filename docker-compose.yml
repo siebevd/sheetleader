@@ -51,13 +51,13 @@ services:
       - sheetleader-network
 
   sql-studio:
-    image: ghcr.io/frectonz/sql-studio:latest
+    image: frectonz/sql-studio:latest
     container_name: sheetleader-sql-studio
     expose:
       - "3030"
     volumes:
       - ./app/data:/data
-    command: /data/sheetleader.db
+    command: /bin/sql-studio --no-browser --no-shutdown --address=0.0.0.0:3030 sqlite /data/sheetleader.db
     restart: unless-stopped
     networks:
       - sheetleader-network
