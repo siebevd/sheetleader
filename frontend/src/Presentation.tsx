@@ -253,7 +253,7 @@ function Presentation() {
         <div className="bg-white rounded-2xl p-6 shadow-2xl">
           <div className="text-center mb-3">
             <QRCodeSVG
-              value="https://volvermogentegenkanker.byundefined.com"
+              value="https://vol-vermogen-tegen-kanker.byundefined.com"
               size={180}
               level="H"
               includeMargin={false}
