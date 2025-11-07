@@ -10,7 +10,7 @@ export const imagesRoutes = new Elysia({ prefix: "/api" })
     try {
       const files = await readdir(IMAGES_DIR);
       const imageFiles = files.filter(file =>
-        /\.(jpg|jpeg|png|gif|webp)$/i.test(file)
+        /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(file)
       );
       return { images: imageFiles };
     } catch (error) {
