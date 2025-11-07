@@ -44,6 +44,8 @@ services:
       - PORT=3000
     env_file:
       - ./app/.env
+    volumes:
+      - ./app/data:/app/data
     restart: unless-stopped
     networks:
       - sheetleader-network
