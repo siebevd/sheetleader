@@ -72,10 +72,8 @@ function Presentation() {
       fetch("/api/results/recent")
         .then((res) => res.json())
         .then((data: ResultsResponse) => {
-          if (data.results && data.results.length > 0) {
-            setResults(data.results);
-            setLoading(false);
-          }
+          setResults(data.results || []);
+          setLoading(false);
         })
         .catch((err) => {
           console.error("Failed to fetch results:", err);
@@ -152,6 +150,7 @@ function Presentation() {
 
   const currentResult = results[resultIndex];
   const nextResult = results[resultIndex + 1];
+  const hasResults = results.length > 0;
 
   return (
     <div
@@ -186,7 +185,7 @@ function Presentation() {
         className="absolute right-0 top-0 h-full flex items-center justify-center p-8 pb-32"
         style={{ width: "70%" }}
       >
-        {results.length > 0 && (
+        {hasResults ? (
           <div
             className={`grid grid-cols-2 gap-6 w-full max-w-6xl transition-opacity duration-500 ${
               resultFade ? "opacity-100" : "opacity-0"
@@ -205,6 +204,17 @@ function Presentation() {
                 </p>
               </div>
             )}
+          </div>
+        ) : (
+          <div className="bg-white/5 rounded-3xl p-12 border-2 border-white/10 shadow-2xl flex items-center justify-center max-w-3xl">
+            <div className="text-center">
+              <p className="text-white text-3xl font-bold mb-4">
+                Nog geen metingen beschikbaar
+              </p>
+              <p className="text-white/60 text-xl">
+                De eerste resultaten verschijnen hier zodra scores zijn toegevoegd
+              </p>
+            </div>
           </div>
         )}
       </div>
