@@ -1,27 +1,17 @@
-# Use Bun for speed and Drizzle compatibility
 FROM oven/bun:1.1
 
 WORKDIR /app
 
-# Copy package manifest files
-COPY package.json ./
-# Copy lockfile if it exists (ignore missing)
-COPY bun.lockb* ./
-
-# Install dependencies (including drizzle-orm)
+# Copy dependency files and install
+COPY package.json bun.lockb* ./
 RUN bun install
 
-# Install drizzle-kit globally (optional, for CLI access)
-RUN bun add -g drizzle-kit
-
-# Copy the rest of your source code
+# Copy app source (including drizzle.config.ts)
 COPY . .
 
-# Expose the Drizzle Studio port
 EXPOSE 4983
 
-# Set environment
 ENV NODE_ENV=development
 
-# Start Drizzle Studio
-CMD ["bunx", "drizzle-kit", "studio", "--host", "0.0.0.0", "--port", "4983"]
+# Run the locally installed drizzle-kit
+CMD ["bun", "run", "drizzle:studio"]
