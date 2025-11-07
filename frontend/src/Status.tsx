@@ -290,11 +290,11 @@ function Status() {
                         </div>
                       </div>
                       <p className="text-white mb-2">{log.message}</p>
-                      {((log.recordsAdded && log.recordsAdded > 0) || (log.recordsUpdated && log.recordsUpdated > 0) || (log.recordsDeleted && log.recordsDeleted > 0)) && (
+                      {((log.recordsAdded ?? 0) > 0 || (log.recordsUpdated ?? 0) > 0 || (log.recordsDeleted ?? 0) > 0) && (
                         <div className="flex gap-4 text-sm">
-                          {log.recordsAdded && log.recordsAdded > 0 && <span className="text-green-300">+{log.recordsAdded} added</span>}
-                          {log.recordsUpdated && log.recordsUpdated > 0 && <span className="text-blue-300">~{log.recordsUpdated} updated</span>}
-                          {log.recordsDeleted && log.recordsDeleted > 0 && <span className="text-red-300">-{log.recordsDeleted} deleted</span>}
+                          {(log.recordsAdded ?? 0) > 0 && <span className="text-green-300">+{log.recordsAdded} added</span>}
+                          {(log.recordsUpdated ?? 0) > 0 && <span className="text-blue-300">~{log.recordsUpdated} updated</span>}
+                          {(log.recordsDeleted ?? 0) > 0 && <span className="text-red-300">-{log.recordsDeleted} deleted</span>}
                         </div>
                       )}
                       {log.errorDetails && (
