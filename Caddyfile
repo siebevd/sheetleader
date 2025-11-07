@@ -10,7 +10,7 @@
     }
 
     # Handle Drizzle Studio
-    handle /studio/* {
+    handle_path /studio* {
         reverse_proxy drizzle-studio:4983
     }
 
