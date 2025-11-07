@@ -22,6 +22,13 @@
       "when": 1762544370210,
       "tag": "0002_greedy_living_tribunal",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1762544936589,
+      "tag": "0003_illegal_thing",
+      "breakpoints": true
     }
   ]
 }
