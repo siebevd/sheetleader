@@ -28,15 +28,15 @@ sleep 5
 
 # Ensure database directory exists
 echo "📁 Ensuring database directory exists..."
-docker-compose exec -T backend mkdir -p /app/data
+docker compose exec -T backend mkdir -p /app/data
 
 # Push database schema (creates tables if they don't exist)
 echo "🗄️  Pushing database schema..."
-docker-compose exec -T backend bunx drizzle-kit push || echo "⚠️  Schema push failed"
+docker compose exec -T backend bunx drizzle-kit push || echo "⚠️  Schema push failed"
 
 # Run database migrations
 echo "🗄️  Running database migrations..."
-docker-compose exec -T backend bunx drizzle-kit migrate || echo "⚠️  Migration failed or no new migrations to run"
+docker compose exec -T backend bunx drizzle-kit migrate || echo "⚠️  Migration failed or no new migrations to run"
 
 # Show container status
 echo ""
