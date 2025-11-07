@@ -1,0 +1,30 @@
+{
+    # Global options
+    admin off
+}
+
+{$DOMAIN:localhost} {
+    # Handle API requests
+    handle /api/* {
+        reverse_proxy backend:3000
+    }
+
+    # Handle Drizzle Studio
+    handle /studio/* {
+        reverse_proxy drizzle-studio:4983
+    }
+
+    # Handle everything else (frontend)
+    handle {
+        reverse_proxy frontend:80
+    }
+
+    # Enable compression
+    encode gzip
+
+    # Logging
+    log {
+        output stdout
+        format console
+    }
+}

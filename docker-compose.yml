@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  caddy:
+    build:
+      context: .
+      dockerfile: Dockerfile.caddy
+    container_name: sheetleader-caddy
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - DOMAIN=${DOMAIN:-localhost}
+    depends_on:
+      - backend
+      - frontend
+      - drizzle-studio
+    restart: unless-stopped
+    networks:
+      - sheetleader-network
+
+  backend:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: sheetleader-backend
+    expose:
+      - "3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    env_file:
+      - ./app/.env
+    restart: unless-stopped
+    networks:
+      - sheetleader-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: sheetleader-frontend
+    expose:
+      - "80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - sheetleader-network
+
+  drizzle-studio:
+    build:
+      context: ./app
+      dockerfile: Dockerfile.studio
+    container_name: sheetleader-drizzle-studio
+    expose:
+      - "4983"
+    volumes:
+      - ./app/data:/app/data
+      - ./app/src:/app/src
+      - ./app/drizzle.config.ts:/app/drizzle.config.ts
+    restart: unless-stopped
+    networks:
+      - sheetleader-network
+
+networks:
+  sheetleader-network:
+    driver: bridge
