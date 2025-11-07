@@ -13,7 +13,7 @@ git pull
 
 # Stop all containers
 echo "🛑 Stopping containers..."
-docker-compose down
+docker compose down
 
 # Remove old build volumes to ensure fresh build
 echo "🗑️  Removing old build volumes..."
@@ -21,7 +21,7 @@ docker volume rm sheetleader_frontend-dist 2>/dev/null || echo "Volume doesn't e
 
 # Rebuild and start containers (force recreate to ensure fresh build)
 echo "🔨 Building and starting containers..."
-docker-compose up -d --build --force-recreate
+docker compose up -d --build --force-recreate
 
 # Wait a moment for containers to start
 sleep 3
@@ -33,12 +33,12 @@ docker-compose exec -T backend bunx drizzle-kit migrate || echo "⚠️  Migrati
 # Show container status
 echo ""
 echo "📊 Container Status:"
-docker-compose ps
+docker compose ps
 
 # Show recent logs
 echo ""
 echo "📝 Recent logs:"
-docker-compose logs --tail=20
+docker compose logs --tail=20
 
 echo ""
 echo "✅ Deployment complete!"
