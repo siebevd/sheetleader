@@ -36,18 +36,20 @@ sheetleader/
 
 ## Services
 
-### 0. Caddy Reverse Proxy (Port 80/443)
+### 0. Caddy (Port 80/443)
 
 - **Technology**: Caddy 2
-- **Purpose**: Routes all traffic through a single entry point
-- **Routes**:
-  - `/` → Frontend (homepage and presentation)
-  - `/api/*` → Backend API
-  - `/studio/*` → Drizzle Studio
+- **Purpose**: All-in-one web server serving static files and reverse proxy
+- **Functionality**:
+  - Serves frontend static files (built React app)
+  - Proxies `/api/*` requests to Backend
+  - Proxies `/studio/*` requests to Drizzle Studio
+  - Handles client-side routing (SPA support with try_files)
 - **Benefits**:
-  - Single domain/IP for all services
-  - Easy to set up HTTPS with automatic SSL certificates
-  - Simplified deployment and URL management
+  - Single web server for everything (no Nginx needed)
+  - Automatic HTTPS with Let's Encrypt
+  - Built-in compression and caching
+  - Simple configuration
 
 ### 1. Backend API
 
@@ -153,10 +155,10 @@ Caddy automatically obtains and renews SSL certificates from Let's Encrypt when 
 **Run specific service:**
 
 ```bash
-docker-compose up caddy       # Reverse proxy
-docker-compose up backend     # API only
-docker-compose up frontend    # Frontend only
-docker-compose up drizzle-studio  # Database UI only
+docker-compose up caddy              # Web server (serves frontend + proxies)
+docker-compose up backend            # API only
+docker-compose up frontend-build     # Build frontend static files
+docker-compose up drizzle-studio     # Database UI only
 ```
 
 **Stop services:**

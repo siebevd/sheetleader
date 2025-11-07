@@ -1,4 +1,4 @@
-# Build stage
+# Build stage only - static files will be served by Caddy
 FROM oven/bun:1 AS build
 WORKDIR /app
 
@@ -12,13 +12,4 @@ COPY . .
 # Build the app
 RUN bun run build
 
-# Production stage
-FROM nginx:alpine
-COPY --from=build /app/dist /usr/share/nginx/html
-
-# Copy nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
+# The dist folder will be copied by docker-compose volume mount

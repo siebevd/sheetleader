@@ -1,6 +1,15 @@
 version: '3.8'
 
 services:
+  frontend-build:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: build
+    container_name: sheetleader-frontend-build
+    volumes:
+      - frontend-dist:/app/dist
+
   caddy:
     build:
       context: .
@@ -11,9 +20,11 @@ services:
       - "443:443"
     environment:
       - DOMAIN=${DOMAIN:-localhost}
+    volumes:
+      - frontend-dist:/var/www/html
     depends_on:
       - backend
-      - frontend
+      - frontend-build
       - drizzle-studio
     restart: unless-stopped
     networks:
@@ -31,19 +42,6 @@ services:
       - PORT=3000
     env_file:
       - ./app/.env
-    restart: unless-stopped
-    networks:
-      - sheetleader-network
-
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: sheetleader-frontend
-    expose:
-      - "80"
-    depends_on:
-      - backend
     restart: unless-stopped
     networks:
       - sheetleader-network
@@ -66,3 +64,6 @@ services:
 networks:
   sheetleader-network:
     driver: bridge
+
+volumes:
+  frontend-dist:

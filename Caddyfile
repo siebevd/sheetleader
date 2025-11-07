@@ -14,9 +14,11 @@
         reverse_proxy drizzle-studio:4983
     }
 
-    # Handle everything else (frontend)
+    # Serve frontend static files
     handle {
-        reverse_proxy frontend:80
+        root * /var/www/html
+        try_files {path} /index.html
+        file_server
     }
 
     # Enable compression
