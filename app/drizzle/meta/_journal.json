@@ -15,6 +15,13 @@
       "when": 1762470894252,
       "tag": "0001_noisy_pixie",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1762544370210,
+      "tag": "0002_greedy_living_tribunal",
+      "breakpoints": true
     }
   ]
 }

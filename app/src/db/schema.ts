@@ -5,7 +5,7 @@ export const results = sqliteTable("results", {
   name: text("name").notNull(),
   tractor: text("tractor").notNull(),
   horsepower: integer("horsepower"),
-  timestamp: integer("timestamp", { mode: "timestamp" }).notNull(),
+  timestamp: integer("timestamp", { mode: "timestamp" }),
 });
 
 export type Result = typeof results.$inferSelect;
