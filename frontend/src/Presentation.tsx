@@ -58,17 +58,10 @@ function Presentation() {
       .catch((err) => console.error("Failed to fetch images:", err));
   }, []);
 
-  // Fetch stats
+  // Fetch results and stats, and poll every minute
   useEffect(() => {
-    fetch("/api/stats")
-      .then((res) => res.json())
-      .then((data: StatsResponse) => setStats(data))
-      .catch((err) => console.error("Failed to fetch stats:", err));
-  }, []);
-
-  // Fetch results (last 20 completed) and poll every minute
-  useEffect(() => {
-    const fetchResults = () => {
+    const fetchData = () => {
+      // Fetch results
       fetch("/api/results/recent")
         .then((res) => res.json())
         .then((data: ResultsResponse) => {
@@ -79,13 +72,19 @@ function Presentation() {
           console.error("Failed to fetch results:", err);
           setLoading(false);
         });
+
+      // Fetch stats
+      fetch("/api/stats")
+        .then((res) => res.json())
+        .then((data: StatsResponse) => setStats(data))
+        .catch((err) => console.error("Failed to fetch stats:", err));
     };
 
     // Initial fetch
-    fetchResults();
+    fetchData();
 
-    // Poll every minute (60000ms)
-    const interval = setInterval(fetchResults, 60000);
+    // Poll every 30 seconds (30000ms)
+    const interval = setInterval(fetchData, 30000);
 
     return () => clearInterval(interval);
   }, []);
